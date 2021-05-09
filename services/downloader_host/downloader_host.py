@@ -48,7 +48,7 @@ def process_cdx_url(connection, url, batch_size=100, source='cc', **kwargs):
     # ensure that we search all records, and not just records from the last year
     if 'from_ts' not in kwargs:
         kwargs['from_ts'] = '19000101000000'
-    
+
     # the cc archive supports filtering by status code, but the ia archive does not;
     # since we only care about status=200, add this filter if possible
     if 'filter' not in kwargs and source=='cc':
@@ -68,17 +68,19 @@ def process_cdx_url(connection, url, batch_size=100, source='cc', **kwargs):
             log.info('fetching result; progress='+str(i)+'/'+str(estimated_urls)+'={:10.4f}'.format(i/estimated_urls)+' url='+result['url'])
 
             # FIXME: extract a warc record from the result variable
+            record = result.fetch_warc_record()
 
             # FIXME: extract the information from the warc record
-            url = None
-            accessed_at = None
-            html = None
+            url = record.rec_headers.get_header('WARC-Target-URI')
+            accessed_at = record.rec_headers.get_header('WARC-Date')
+            html = record.content_stream().read()
             log.debug("url="+url)
 
             # FIXME: extract the metainfo using the metahtml library
-            meta = None
-            pspacy_title = None
-            pspacy_content = None
+            meta = metahtml.parse(html, url)
+            pspacy_title = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
+            pspacy_content = pspacy.lemmatize(meta['language']['best']['value'],
+                    meta['content']['best']['value'])
 
             # append to the batch
             batch.append({
@@ -140,7 +142,7 @@ if __name__=='__main__':
     engine = sqlalchemy.create_engine(args.db, connect_args={
         'application_name': sys.argv[0].split('/')[-1],
         'connect_timeout': 60*60,
-        })  
+        })
     connection = engine.connect()
 
     # NOTE: ensure that the url_pattern will not overload the server

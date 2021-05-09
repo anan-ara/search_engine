@@ -64,7 +64,7 @@ def process_warc_from_url(connection, warc_url):
         return
 
     # process the warc file in a temporary directory;
-    # the downloaded warc file will be stored in this directory and automatically deleted 
+    # the downloaded warc file will be stored in this directory and automatically deleted
     with tempfile.TemporaryDirectory() as tempdir:
         logging.info('downloading url '+warc_url+' to '+tempdir)
         warc_path = wget.download(warc_url, out=tempdir)
@@ -104,7 +104,7 @@ def process_warc_from_disk(connection, warc_path, id_source, batch_size=100):
                     meta = metahtml.parse(html, url)
                     try:
                         pspacy_title = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
-                        pspacy_content = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
+                        pspacy_content = pspacy.lemmatize(meta['language']['best']['value'], meta['content']['best']['value'])
                     except TypeError:
                         pspacy_title = None
                         pspacy_content = None
@@ -112,7 +112,7 @@ def process_warc_from_disk(connection, warc_path, id_source, batch_size=100):
                 # if there was an error in metahtml, log it
                 except Exception as e:
                     logging.warning('url='+url+' exception='+str(e))
-                    meta = { 
+                    meta = {
                         'exception' : {
                             'str(e)' : str(e),
                             'type' : type(e).__name__,
@@ -170,7 +170,7 @@ if __name__ == '__main__':
     Insert the warc file into the database.
     ''')
     parser.add_argument('--warc', help='warc file to insert into the db; may be either a file path or a url')
-    parser.add_argument('--cc_url') 
+    parser.add_argument('--cc_url')
     parser.add_argument('--db', default='postgresql:///')
     args = parser.parse_args()
 
@@ -181,7 +181,7 @@ if __name__ == '__main__':
     engine = sqlalchemy.create_engine(args.db, connect_args={
         'application_name': 'metahtml',
         'connect_timeout': 60*60
-        })  
+        })
     connection = engine.connect()
 
     if args.warc:

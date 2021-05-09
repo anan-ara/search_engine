@@ -17,4 +17,4 @@ name=$(basename $(dirname $warc))
 echo "warc=$name"
 
 # launch the docker container
-docker run -d --name=metahtml_warc_$name --network=novichenko novichenko/downloader_warc --db=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@db:5432/$POSTGRES_DB "--warc=$warc"
+docker run -d --name=metahtml_warc_$hashid --network=novichenko novichenko/downloader_warc --db=postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@db:5432/$POSTGRES_DB "--warc=$warc"
