@@ -13,7 +13,7 @@ services:
     build: ./services/pg
     command: postgres -c config_file=/etc/postgresql.conf
     volumes:
-            - $HOME/bigdata/search_engine5:/var/lib/postgresql/data
+            - $HOME/bigdata/search_engine6:/var/lib/postgresql/data
     env_file:
       - ./.env.prod
 
