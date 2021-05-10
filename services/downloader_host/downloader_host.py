@@ -74,13 +74,16 @@ def process_cdx_url(connection, url, batch_size=100, source='cc', **kwargs):
             url = record.rec_headers.get_header('WARC-Target-URI')
             accessed_at = record.rec_headers.get_header('WARC-Date')
             html = record.content_stream().read()
-            log.debug("url="+url)
+            logging.debug("url="+url)
 
             # FIXME: extract the metainfo using the metahtml library
             meta = metahtml.parse(html, url)
-            pspacy_title = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
-            pspacy_content = pspacy.lemmatize(meta['language']['best']['value'],
-                    meta['content']['best']['value'])
+            try:
+                pspacy_title = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
+                pspacy_content = pspacy.lemmatize(meta['language']['content']['value'], meta['title']['content']['value'])
+            except TypeError:
+                pspacy_title = None
+                pspacy_content = None
 
             # append to the batch
             batch.append({
