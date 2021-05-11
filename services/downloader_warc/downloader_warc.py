@@ -104,7 +104,7 @@ def process_warc_from_disk(connection, warc_path, id_source, batch_size=100):
                     meta = metahtml.parse(html, url)
                     try:
                         pspacy_title = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
-                        pspacy_content = pspacy.lemmatize(meta['language']['best']['value'], meta['content']['best']['value'])
+                        pspacy_content = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
                     except TypeError:
                         pspacy_title = None
                         pspacy_content = None

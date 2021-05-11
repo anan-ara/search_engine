@@ -55,7 +55,7 @@ Your tasks are to:
 ## Task 2: loading data
 
 There are two services for loading data:
-1. `downloader_warc` loads an entire WARC file into the database; typically, this will be about 100,000 urls from many different hosts. 
+1. `downloader_warc` loads an entire WARC file into the database; typically, this will be about 100,000 urls from many different hosts.
 1. `downloader_host` searches the all WARC entries in either the common crawl or internet archive that match a particular pattern, and adds all of them into the database
 
 ### Task 2a
@@ -138,21 +138,24 @@ There are two steps:
        ```
        select count(*) from metahtml;
        ```
+   <img src='query1.png' />
 
     1. This query shows the number of webpages loaded / hour:
        ```
        select * from metahtml_rollup_insert order by insert_hour desc limit 100;
        ```
+   <img src='query2.png' />
 
     1. This query shows the hostnames that you have downloaded the most webpages from:
        ```
        select * from metahtml_rollup_host order by hostpath desc limit 100;
        ```
+   <img src='query3.png' />
 
 1. Take a screenshot of an interesting search result.
    Add the screenshot to your git repo, and modify the `<img>` tag below to point to the screenshot.
 
-   <img src='screenshot.png' />
+   <img src='search.png' />
 
 1. Commit and push your changes to github.
 

@@ -80,7 +80,7 @@ def process_cdx_url(connection, url, batch_size=100, source='cc', **kwargs):
             meta = metahtml.parse(html, url)
             try:
                 pspacy_title = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
-                pspacy_content = pspacy.lemmatize(meta['language']['best']['value'], meta['content']['best']['value'])
+                pspacy_content = pspacy.lemmatize(meta['language']['best']['value'], meta['title']['best']['value'])
             except TypeError:
                 pspacy_title = None
                 pspacy_content = None
